@@ -1,0 +1,87 @@
+name: Build & Push to GCP Artifact Registry
+
+on:
+  push:
+    branches:
+      - main
+  # Permite disparar manualmente desde la UI de GitHub
+  workflow_dispatch:
+
+env:
+  # ─── Configura estas variables en Settings > Variables de tu repo ───────────
+  REGION:     ${{ vars.GCP_REGION }}         # ej: southamerica-east1
+  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}     # ej: mi-proyecto-123456
+  REPO:       ${{ vars.GCP_AR_REPO }}        # ej: webune
+  IMAGE:      ${{ vars.GCP_IMAGE_NAME }}     # ej: webunefront
+
+jobs:
+  build-and-push:
+    name: Build Docker image and push to Artifact Registry
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write   # Necesario para Workload Identity Federation (keyless auth)
+
+    steps:
+      # 1. Checkout del código
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. Autenticación con GCP usando Workload Identity Federation (sin claves JSON)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account:            ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      # 3. Configurar Docker con las credenciales de GCP
+      - name: Configure Docker for Artifact Registry
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      # 4. Caché de capas Docker para acelerar builds sucesivos
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # 5. Build y Push
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # La URL de WP se inyecta como build ARG desde un secret de GitHub
+          build-args: |
+            NEXT_PUBLIC_WORDPRESS_URL=${{ secrets.NEXT_PUBLIC_WORDPRESS_URL }}
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:latest
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:${{ github.sha }}
+          # Caché de capas para builds más rápidos
+          cache-from: type=gha
+          cache-to:   type=gha,mode=max
+
+      # 6. (Opcional) SSH al VPS para hacer pull y restart del contenedor
+      # Descomenta y configura si quieres deploy automático al VPS:
+      #
+      # - name: Deploy to GCP VPS
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host:     ${{ secrets.VPS_HOST }}
+      #     username: ${{ secrets.VPS_USER }}
+      #     key:      ${{ secrets.VPS_SSH_KEY }}
+      #     script: |
+      #       docker pull ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:latest
+      #       docker stop webunefront || true
+      #       docker rm   webunefront || true
+      #       docker run -d \
+      #         --name webunefront \
+      #         --restart unless-stopped \
+      #         -p 3000:3000 \
+      #         ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}:latest
+
+      - name: Summary
+        run: |
+          echo "### ✅ Deploy completado" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Imagen:** \`${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.IMAGE }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Tags:** \`latest\`, \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
