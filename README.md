@@ -36,7 +36,7 @@ Este es un **Starter Kit / Boilerplate** de producción diseñado para arrancar 
 ## 📁 Estructura de carpetas
 
 ```
-webunefront/
+wpfront-boilerplate/
 ├── .github/workflows/          # CI/CD (GitHub Actions)
 ├── app/                        # Rutas, layouts y página de bienvenida
 │   ├── globals.css             # Design Tokens y reset global
@@ -69,7 +69,7 @@ webunefront/
 ### 2. Instalación
 ```bash
 git clone <repo-url>
-cd webunefront
+cd wpfront-boilerplate
 npm install
 ```
 
@@ -94,7 +94,7 @@ El proyecto incluye un `Dockerfile` optimizado y un workflow de GitHub Actions e
 
 ### Build Local
 ```bash
-docker build --build-arg NEXT_PUBLIC_WORDPRESS_URL=https://tu-wp.com -t webune:latest .
+docker build --build-arg NEXT_PUBLIC_WORDPRESS_URL=https://tu-wp.com -t wpbp:latest .
 ```
 
 ### GitHub Actions (CI/CD)
