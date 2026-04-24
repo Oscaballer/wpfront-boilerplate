@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 // Extrae el hostname de la URL de WordPress para permitir imágenes remotas.
 // Ejemplo: "https://cms.webune.com" → "cms.webune.com"
-const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "localhost";
+const wpUrl = process.env.WORDPRESS_URL ?? process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "localhost";
 const wpHostname = (() => {
   try {
     return new URL(wpUrl).hostname;
@@ -38,6 +38,9 @@ const nextConfig: NextConfig = {
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "X-Frame-Options", value: "SAMEORIGIN" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "X-XSS-Protection", value: "1; mode=block" },
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains; preload" },
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
         ],
       },
     ];

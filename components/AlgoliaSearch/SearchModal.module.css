@@ -1,0 +1,226 @@
+.triggerBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #eaeaea);
+  background-color: var(--bg-color, #ffffff);
+  color: var(--text-color, #333333);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-geist-sans);
+}
+
+.triggerBtn:hover {
+  border-color: var(--border-color-hover, #cccccc);
+  background-color: var(--bg-hover-color, #f9f9f9);
+}
+
+.placeholderText {
+  font-size: 0.9rem;
+  color: var(--text-muted, #666666);
+}
+
+.shortcut {
+  margin-left: auto;
+  font-size: 0.75rem;
+  padding: 0.1rem 0.3rem;
+  border-radius: 4px;
+  background-color: var(--bg-muted, #f1f1f1);
+  color: var(--text-muted, #666666);
+  border: 1px solid var(--border-color, #eaeaea);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 10vh;
+}
+
+.modal {
+  background-color: var(--bg-color, #ffffff);
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  border: 1px solid var(--border-color, #eaeaea);
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color, #eaeaea);
+}
+
+.closeBtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted, #666666);
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeBtn:hover {
+  background-color: var(--bg-muted, #f1f1f1);
+  color: var(--text-color, #333333);
+}
+
+.searchContainer {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.searchBoxRoot {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, #eaeaea);
+}
+
+.searchBoxForm {
+  display: flex;
+  position: relative;
+}
+
+.searchBoxInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #eaeaea);
+  font-size: 1rem;
+  outline: none;
+  font-family: var(--font-geist-sans);
+  background-color: var(--bg-color, #ffffff);
+  color: var(--text-color, #333333);
+}
+
+.searchBoxInput:focus {
+  border-color: var(--accent-color, #0070f3);
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+}
+
+.searchBoxSubmit {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted, #666666);
+  display: flex;
+}
+
+.searchBoxReset {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted, #666666);
+  cursor: pointer;
+}
+
+.hitsContainer {
+  overflow-y: auto;
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.hitsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.hitsItem {
+  margin: 0;
+}
+
+.hitLink {
+  display: block;
+  text-decoration: none;
+  padding: 0.75rem;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  color: inherit;
+}
+
+.hitLink:hover {
+  background-color: var(--bg-hover-color, #f9f9f9);
+}
+
+.hitTitle {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-color, #333333);
+}
+
+.hitSnippet {
+  font-size: 0.85rem;
+  color: var(--text-muted, #666666);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Algolia Highlights */
+:global(.ais-Highlight-highlighted),
+:global(.ais-Snippet-highlighted) {
+  background-color: rgba(0, 112, 243, 0.2);
+  color: var(--accent-color, #0070f3);
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Dark mode support si el boilerplate usa data-theme="dark" u otro método */
+@media (prefers-color-scheme: dark) {
+  .triggerBtn, .modal, .searchBoxInput {
+    background-color: #111;
+    color: #fff;
+    border-color: #333;
+  }
+  .hitTitle {
+    color: #fff;
+  }
+  .hitSnippet, .placeholderText, .shortcut {
+    color: #999;
+  }
+  .shortcut {
+    background-color: #222;
+    border-color: #333;
+  }
+  .hitLink:hover, .triggerBtn:hover {
+    background-color: #222;
+    border-color: #444;
+  }
+  .overlay {
+    background-color: rgba(0,0,0,0.7);
+  }
+  .header, .searchBoxRoot {
+    border-color: #333;
+  }
+}

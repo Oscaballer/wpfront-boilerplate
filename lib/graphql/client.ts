@@ -8,7 +8,7 @@
 import { GraphQLClient } from "graphql-request";
 
 const endpoint = `${
-  process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "http://localhost:8080"
+  process.env.WORDPRESS_URL ?? process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "http://localhost:8080"
 }/graphql`;
 
 /**

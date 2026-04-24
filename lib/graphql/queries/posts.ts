@@ -13,7 +13,7 @@ import type {
 
 // ─── Fragmentos reutilizables ─────────────────────────────────────────────────
 
-const POST_CARD_FIELDS = gql`
+export const POST_CARD_FIELDS = gql`
   fragment PostCardFields on Post {
     id
     title
@@ -49,10 +49,10 @@ const POST_CARD_FIELDS = gql`
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
-const GET_POSTS = gql`
+export const GET_POSTS = gql`
   ${POST_CARD_FIELDS}
-  query GetPosts($first: Int = 12, $after: String) {
-    posts(first: $first, after: $after, where: { status: PUBLISH }) {
+  query GetPosts($first: Int = 12, $after: String, $language: LanguageCodeFilterEnum) {
+    posts(first: $first, after: $after, where: { status: PUBLISH, language: $language }) {
       nodes {
         ...PostCardFields
       }
@@ -66,9 +66,9 @@ const GET_POSTS = gql`
   }
 `;
 
-const GET_POST_BY_SLUG = gql`
-  query GetPostBySlug($slug: ID!) {
-    post(id: $slug, idType: SLUG) {
+export const GET_POST_BY_SLUG = gql`
+  query GetPostBySlug($slug: ID!, $language: LanguageCodeFilterEnum) {
+    post(id: $slug, idType: SLUG, where: { language: $language }) {
       id
       title
       slug
@@ -111,7 +111,7 @@ const GET_POST_BY_SLUG = gql`
   }
 `;
 
-const GET_ALL_POST_SLUGS = gql`
+export const GET_ALL_POST_SLUGS = gql`
   query GetAllPostSlugs {
     posts(first: 1000, where: { status: PUBLISH }) {
       nodes {
@@ -128,11 +128,13 @@ const GET_ALL_POST_SLUGS = gql`
  */
 export async function getPosts(
   first = 12,
-  after?: string
+  after?: string,
+  language?: string
 ): Promise<WpPostsResponse["posts"]> {
   const data = await graphqlClient.request<WpPostsResponse>(GET_POSTS, {
     first,
     after,
+    language: language?.toUpperCase(),
   });
   return data.posts;
 }
@@ -141,9 +143,10 @@ export async function getPosts(
  * Obtiene un post por su slug.
  * Retorna null si el post no existe.
  */
-export async function getPostBySlug(slug: string): Promise<WpPost | null> {
+export async function getPostBySlug(slug: string, language?: string): Promise<WpPost | null> {
   const data = await graphqlClient.request<WpPostResponse>(GET_POST_BY_SLUG, {
     slug,
+    language: language?.toUpperCase(),
   });
   return data.post;
 }

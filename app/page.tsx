@@ -5,12 +5,14 @@
  * Reemplázala con tu propio contenido real una vez configurado.
  */
 import styles from "./page.module.css";
+import SearchModal from "@/components/AlgoliaSearch/SearchModal";
 
 const STACK = [
   "Next.js 16",
   "React 19",
   "TypeScript",
   "WPGraphQL",
+  "Algolia",
   "CSS Modules",
   "TanStack Query",
   "Docker",
@@ -18,11 +20,16 @@ const STACK = [
 ];
 
 export default function Home() {
-  const wpUrl = process.env.NEXT_PUBLIC_WORDPRESS_URL;
+  const wpUrl = process.env.WORDPRESS_URL ?? process.env.NEXT_PUBLIC_WORDPRESS_URL;
   const isConfigured = !!wpUrl && wpUrl !== "https://TU_WORDPRESS_URL_AQUI";
 
   return (
     <main className={styles.page}>
+      {/* Header flotante para demo del buscador */}
+      <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
+        <SearchModal />
+      </div>
+
       <section className={styles.hero}>
         {/* Badge */}
         <p className={styles.badge}>Boilerplate listo para usar</p>

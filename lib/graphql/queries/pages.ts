@@ -13,9 +13,9 @@ import type {
 
 // ─── Queries ──────────────────────────────────────────────────────────────────
 
-const GET_PAGE_BY_SLUG = gql`
-  query GetPageBySlug($slug: ID!) {
-    page(id: $slug, idType: URI) {
+export const GET_PAGE_BY_SLUG = gql`
+  query GetPageBySlug($slug: ID!, $language: LanguageCodeFilterEnum) {
+    page(id: $slug, idType: URI, where: { language: $language }) {
       id
       title
       slug
@@ -34,7 +34,7 @@ const GET_PAGE_BY_SLUG = gql`
   }
 `;
 
-const GET_ALL_PAGES = gql`
+export const GET_ALL_PAGES = gql`
   query GetAllPages {
     pages(first: 100, where: { status: PUBLISH }) {
       nodes {
@@ -52,9 +52,10 @@ const GET_ALL_PAGES = gql`
  * Obtiene una página WordPress por su slug/URI.
  * Retorna null si la página no existe.
  */
-export async function getPageBySlug(slug: string): Promise<WpPage | null> {
+export async function getPageBySlug(slug: string, language?: string): Promise<WpPage | null> {
   const data = await graphqlClient.request<WpPageResponse>(GET_PAGE_BY_SLUG, {
     slug,
+    language: language?.toUpperCase(),
   });
   return data.page;
 }
