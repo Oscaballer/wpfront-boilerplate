@@ -3,13 +3,16 @@
  *
  * Queries y funciones de fetching para Posts de WordPress vía WPGraphQL.
  */
-import { gql } from "graphql-request";
-import { graphqlClient } from "../client";
+import { graphqlClient, type GraphQLRequestOptions } from "../client";
 import type {
   WpPost,
   WpPostsResponse,
   WpPostResponse,
 } from "../../types/wordpress";
+
+/** Tagged template literal para sintaxis GraphQL — retorna la cadena tal cual. */
+const gql = (strings: TemplateStringsArray, ...values: unknown[]) =>
+  strings.reduce((acc, s, i) => acc + s + (values[i] ?? ""), "");
 
 // ─── Fragmentos reutilizables ─────────────────────────────────────────────────
 
@@ -51,8 +54,14 @@ export const POST_CARD_FIELDS = gql`
 
 export const GET_POSTS = gql`
   ${POST_CARD_FIELDS}
-  query GetPosts($first: Int = 12, $after: String, $language: LanguageCodeFilterEnum) {
-    posts(first: $first, after: $after, where: { status: PUBLISH, language: $language }) {
+  query GetPosts($first: Int, $after: String, $last: Int, $before: String) {
+    posts(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      where: { status: PUBLISH }
+    ) {
       nodes {
         ...PostCardFields
       }
@@ -67,8 +76,8 @@ export const GET_POSTS = gql`
 `;
 
 export const GET_POST_BY_SLUG = gql`
-  query GetPostBySlug($slug: ID!, $language: LanguageCodeFilterEnum) {
-    post(id: $slug, idType: SLUG, where: { language: $language }) {
+  query GetPostBySlug($slug: ID!) {
+    post(id: $slug, idType: SLUG) {
       id
       title
       slug
@@ -129,13 +138,14 @@ export const GET_ALL_POST_SLUGS = gql`
 export async function getPosts(
   first = 12,
   after?: string,
-  language?: string
+  language?: string,
+  options?: GraphQLRequestOptions
 ): Promise<WpPostsResponse["posts"]> {
-  const data = await graphqlClient.request<WpPostsResponse>(GET_POSTS, {
-    first,
-    after,
-    language: language?.toUpperCase(),
-  });
+  const data = await graphqlClient.request<WpPostsResponse>(
+    GET_POSTS,
+    { first, after },
+    options
+  );
   return data.posts;
 }
 
@@ -143,11 +153,16 @@ export async function getPosts(
  * Obtiene un post por su slug.
  * Retorna null si el post no existe.
  */
-export async function getPostBySlug(slug: string, language?: string): Promise<WpPost | null> {
-  const data = await graphqlClient.request<WpPostResponse>(GET_POST_BY_SLUG, {
-    slug,
-    language: language?.toUpperCase(),
-  });
+export async function getPostBySlug(
+  slug: string,
+  language?: string,
+  options?: GraphQLRequestOptions
+): Promise<WpPost | null> {
+  const data = await graphqlClient.request<WpPostResponse>(
+    GET_POST_BY_SLUG,
+    { slug },
+    options
+  );
   return data.post;
 }
 
@@ -155,9 +170,11 @@ export async function getPostBySlug(slug: string, language?: string): Promise<Wp
  * Obtiene todos los slugs de posts publicados.
  * Útil para generateStaticParams() en rutas dinámicas.
  */
-export async function getAllPostSlugs(): Promise<{ slug: string }[]> {
+export async function getAllPostSlugs(
+  options?: GraphQLRequestOptions
+): Promise<{ slug: string }[]> {
   const data = await graphqlClient.request<{
     posts: { nodes: { slug: string }[] };
-  }>(GET_ALL_POST_SLUGS);
+  }>(GET_ALL_POST_SLUGS, undefined, options);
   return data.posts.nodes;
 }

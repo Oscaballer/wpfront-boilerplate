@@ -1,139 +1,69 @@
 /* ============================================================
-   globals.css — Design Tokens & Base Styles
-   Next.js WP Boilerplate
+   globals.css — Design Tokens, Base Styles & Global Utilities
+   Portal Web - Facultad de Derecho y Ciencias Sociales
+   Universidad Nacional del Este
    ============================================================ */
 
-/* ─── Colores ─────────────────────────────────────────────── */
+/* === Google Fonts === */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
+
+/* === Design Tokens === */
 :root {
-  /* Superficies */
-  --color-bg: #ffffff;
-  --color-bg-subtle: #f5f5f5;
-  --color-bg-muted: #ebebeb;
+  /* Colors — Paleta moderna azul */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #60a5fa;
+  --color-primary-hover: #1d4ed8;
+  --color-accent: #f59e0b;
+  --color-accent-light: #fbbf24;
+  --color-accent-muted: rgba(245, 158, 11, 0.15);
 
-  /* Texto */
-  --color-text: #111111;
-  --color-text-muted: #555555;
-  --color-text-subtle: #888888;
+  /* Neutrals — tonos grises neutros */
+  --color-text: #1f2937;
+  --color-text-light: #4b5563;
+  --color-text-muted: #9ca3af;
+  --color-bg: #f9fafb;
+  --color-bg-white: #ffffff;
+  --color-bg-alt: #f3f4f6;
+  --color-bg-dark: #111827;
+  --color-border: #e5e7eb;
+  --color-border-light: #f3f4f6;
 
-  /* Acento principal — personalizar por proyecto */
-  --color-primary: #0057ff;
-  --color-primary-hover: #0041cc;
-  --color-primary-fg: #ffffff;
+  /* Typography */
+  --font-heading: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-body: 'Roboto', system-ui, -apple-system, sans-serif;
 
-  /* Bordes */
-  --color-border: #e0e0e0;
-  --color-border-strong: #b0b0b0;
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.75rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 3.5rem;
+  --space-3xl: 4.5rem;
 
-  /* Estados */
-  --color-error: #d32f2f;
-  --color-success: #2e7d32;
-  --color-warning: #ed6c02;
+  /* Container */
+  --container-padding: 0rem;
+  --container-max: 1200px;
 
-  /* ─── Tipografía ────────────────────────────────────────── */
-  --font-sans: var(--font-geist-sans), Arial, Helvetica, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, "Courier New", monospace;
+  /* Borders */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
 
-  --font-size-xs:   0.75rem;   /* 12px */
-  --font-size-sm:   0.875rem;  /* 14px */
-  --font-size-base: 1rem;      /* 16px */
-  --font-size-lg:   1.125rem;  /* 18px */
-  --font-size-xl:   1.25rem;   /* 20px */
-  --font-size-2xl:  1.5rem;    /* 24px */
-  --font-size-3xl:  1.875rem;  /* 30px */
-  --font-size-4xl:  2.25rem;   /* 36px */
-  --font-size-5xl:  3rem;      /* 48px */
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(30, 10, 15, 0.08);
+  --shadow-md: 0 4px 16px rgba(30, 10, 15, 0.12);
+  --shadow-lg: 0 8px 32px rgba(30, 10, 15, 0.14);
+  --shadow-xl: 0 16px 48px rgba(30, 10, 15, 0.18);
 
-  --font-weight-normal:   400;
-  --font-weight-medium:   500;
-  --font-weight-semibold: 600;
-  --font-weight-bold:     700;
-
-  --line-height-tight:  1.25;
-  --line-height-snug:   1.375;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.75;
-
-  /* ─── Espaciado ─────────────────────────────────────────── */
-  --spacing-1:  0.25rem;   /* 4px  */
-  --spacing-2:  0.5rem;    /* 8px  */
-  --spacing-3:  0.75rem;   /* 12px */
-  --spacing-4:  1rem;      /* 16px */
-  --spacing-5:  1.25rem;   /* 20px */
-  --spacing-6:  1.5rem;    /* 24px */
-  --spacing-8:  2rem;      /* 32px */
-  --spacing-10: 2.5rem;    /* 40px */
-  --spacing-12: 3rem;      /* 48px */
-  --spacing-16: 4rem;      /* 64px */
-  --spacing-20: 5rem;      /* 80px */
-  --spacing-24: 6rem;      /* 96px */
-
-  /* ─── Layout ────────────────────────────────────────────── */
-  --container-sm:  640px;
-  --container-md:  768px;
-  --container-lg:  1024px;
-  --container-xl:  1280px;
-  --container-2xl: 1440px;
-  --container-padding: var(--spacing-6); /* padding horizontal del Container */
-
-  /* ─── Radios ─────────────────────────────────────────────── */
-  --radius-sm:   4px;
-  --radius-md:   8px;
-  --radius-lg:   12px;
-  --radius-xl:   16px;
-  --radius-full: 9999px;
-
-  /* ─── Sombras ────────────────────────────────────────────── */
-  --shadow-sm:  0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-  /* ─── Transiciones ───────────────────────────────────────── */
-  --transition-fast:   150ms ease;
-  --transition-normal: 250ms ease;
-  --transition-slow:   400ms ease;
-
-  /* ─── Z-index ────────────────────────────────────────────── */
-  --z-below:   -1;
-  --z-base:     0;
-  --z-raised:   10;
-  --z-dropdown: 100;
-  --z-sticky:   200;
-  --z-overlay:  300;
-  --z-modal:    400;
-  --z-toast:    500;
+  /* Transitions */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
-/* ─── Dark Mode ──────────────────────────────────────────── */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg:          #0a0a0a;
-    --color-bg-subtle:   #141414;
-    --color-bg-muted:    #1f1f1f;
-
-    --color-text:        #ededed;
-    --color-text-muted:  #aaaaaa;
-    --color-text-subtle: #666666;
-
-    --color-primary:       #4d8aff;
-    --color-primary-hover: #6b9fff;
-    --color-primary-fg:    #0a0a0a;
-
-    --color-border:       #2a2a2a;
-    --color-border-strong: #444444;
-
-    --shadow-sm:  0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-md:  0 4px 6px -1px rgba(0, 0, 0, 0.4);
-    --shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.4);
-    --shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.5);
-  }
-
-  html {
-    color-scheme: dark;
-  }
-}
-
-/* ─── Reset ──────────────────────────────────────────────── */
+/* === Reset & Base === */
 *,
 *::before,
 *::after {
@@ -143,19 +73,19 @@
 }
 
 html {
-  max-width: 100vw;
-  overflow-x: hidden;
   scroll-behavior: smooth;
+  scroll-padding-top: 90px;
+  font-size: 16px;
 }
 
 body {
-  background-color: var(--color-bg);
+  font-family: var(--font-body);
   color: var(--color-text);
-  font-family: var(--font-sans);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-normal);
+  background-color: var(--color-bg);
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 img,
@@ -166,24 +96,328 @@ video {
 }
 
 a {
-  color: inherit;
+  color: var(--color-primary);
   text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+ul,
+ol {
+  list-style: none;
 }
 
 button {
   cursor: pointer;
+  border: none;
+  background: none;
   font-family: inherit;
 }
 
-/* ─── Utilidades mínimas de accesibilidad ────────────────── */
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
+/* === Container === */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+.container-narrow {
+  max-width: 900px;
+}
+
+/* === Typography === */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  padding-left: var(--space-md);
+  border-left: 3px solid var(--color-accent);
+  margin-bottom: var(--space-sm);
+  letter-spacing: 0.01em;
+}
+
+.section-subtitle {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-lg);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.fade-in-right {
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fade-in-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.slide-up {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger>*:nth-child(1) {
+  transition-delay: 0.05s;
+}
+
+.stagger>*:nth-child(2) {
+  transition-delay: 0.12s;
+}
+
+.stagger>*:nth-child(3) {
+  transition-delay: 0.19s;
+}
+
+.stagger>*:nth-child(4) {
+  transition-delay: 0.26s;
+}
+
+.stagger>*:nth-child(5) {
+  transition-delay: 0.33s;
+}
+
+/* =========================================
+   GENERIC CONTENT STYLES
+   ========================================= */
+.content {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--color-text);
+  text-align: justify;
+}
+
+.content p {
+  margin-bottom: var(--space-lg);
+}
+
+.content h2 {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--color-primary-dark);
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-md);
+  border-bottom: 2px solid var(--color-primary-light);
+  padding-bottom: 0.5rem;
+}
+
+.content h3 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-sm);
+}
+
+.content ul,
+.content ol {
+  margin-bottom: var(--space-lg);
+  padding-left: var(--space-xl);
+}
+
+.content li {
+  margin-bottom: var(--space-xs);
+}
+
+.content ul li {
+  list-style-type: disc;
+}
+
+.content ul li::marker {
+  color: var(--color-accent);
+}
+
+.content a {
+  color: var(--color-primary);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--color-primary-light);
+  text-underline-offset: 3px;
+  transition: all var(--transition-fast);
+}
+
+.content a:hover {
+  color: var(--color-primary-dark);
+  text-decoration-color: var(--color-primary-dark);
+  background: var(--color-accent-muted);
+}
+
+.content blockquote {
+  margin: var(--space-xl) 0;
+  padding: var(--space-lg) var(--space-xl);
+  border-left: 4px solid var(--color-accent);
+  background: var(--color-bg-alt);
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+}
+
+.content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-sm);
+  margin: var(--space-md) 0;
+}
+
+.content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: var(--space-xl) 0;
+  font-size: 0.9rem;
+  background: var(--color-bg-white);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--radius-sm);
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
+}
+
+.content th,
+.content td {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.content th {
+  background-color: var(--color-bg-alt);
+  font-weight: 600;
+  color: var(--color-primary-dark);
+}
+
+.content tr:hover {
+  background-color: var(--color-bg);
+}
+
+/* =========================================
+   RESPONSIVE GLOBAL
+   ========================================= */
+@media (max-width: 1024px) {
+  :root {
+    --container-padding: 2.5rem;
+  }
+
+  .section-title {
+    font-size: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --container-padding: 2rem;
+  }
+
+  main.section.container {
+    padding: 0 var(--space-lg);
+  }
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --container-padding: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
 }

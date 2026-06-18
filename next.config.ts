@@ -20,13 +20,24 @@ const nextConfig: NextConfig = {
   },
 
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: wpHostname,
-        pathname: "/wp-content/uploads/**",
+        protocol: 'https',
+        hostname: 'media.derechoune.edu.py',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+      },
+      {
+        protocol: 'http',
+        hostname: '0.0.0.0',
+        port: '3000',
       },
     ],
+    dangerouslyAllowLocalIP: true,
   },
 
   // Seguridad: cabeceras HTTP recomendadas para producción

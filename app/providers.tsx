@@ -14,6 +14,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState, type ReactNode } from "react";
+import ScrollAnimations from "@/components/ScrollAnimations/ScrollAnimations";
 
 interface ProvidersProps {
   children: ReactNode;
@@ -41,6 +42,7 @@ export default function Providers({ children }: ProvidersProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ScrollAnimations />
       {children}
       {/* Las DevTools solo se cargan en desarrollo gracias a tree-shaking */}
       <ReactQueryDevtools initialIsOpen={false} />

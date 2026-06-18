@@ -1,26 +1,50 @@
 /**
  * lib/graphql/client.ts
  *
- * Cliente GraphQL singleton para WPGraphQL.
- * Usa la variable de entorno NEXT_PUBLIC_WORDPRESS_URL configurada
- * en .env.local (development) o como build ARG en Docker (producción).
+ * Cliente GraphQL usando fetch nativo — integrado con el data cache
+ * de Next.js para soportar revalidación bajo demanda (ISR) por tags.
  */
-import { GraphQLClient } from "graphql-request";
+const endpoint = `${process.env.WORDPRESS_URL ?? process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "http://localhost:8080"
+    }/graphql`;
 
-const endpoint = `${
-  process.env.WORDPRESS_URL ?? process.env.NEXT_PUBLIC_WORDPRESS_URL ?? "http://localhost:8080"
-}/graphql`;
+console.log('[GraphQL Client] Endpoint:', endpoint);
 
-/**
- * Cliente GraphQL reutilizable en toda la aplicación.
- * En Next.js App Router, este módulo se evalúa en el servidor
- * (Server Components y Route Handlers), por lo que es seguro aquí.
- */
-export const graphqlClient = new GraphQLClient(endpoint, {
-  headers: {
-    "Content-Type": "application/json",
-  },
-  // En producción puedes agregar autenticación aquí si necesitas
-  // acceder a contenido privado de WordPress:
-  // headers: { Authorization: `Bearer ${process.env.WP_AUTH_TOKEN}` },
-});
+export interface GraphQLRequestOptions {
+    /** Next.js cache tags para on-demand revalidation (revalidateTag). */
+    tags?: string[];
+}
+
+
+
+export const graphqlClient = {
+    async request<T>(
+        query: string,
+        variables?: Record<string, unknown>,
+        options?: GraphQLRequestOptions
+    ): Promise<T> {
+        const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, variables }),
+
+            // 🔴 ESTE ES EL CAMBIO CLAVE
+            next: {
+                revalidate: 86400,
+                tags: options?.tags ?? [],
+            },
+        });
+
+        if (!res.ok) {
+            const errorBody = await res.text();
+            throw new Error(`GraphQL request failed: ${res.status} - ${errorBody}`);
+        }
+
+        const json = await res.json();
+
+        if (json.errors) {
+            throw new Error(json.errors[0]?.message || 'GraphQL error');
+        }
+
+        return json.data as T;
+    },
+};

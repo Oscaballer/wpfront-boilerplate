@@ -48,6 +48,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Aplicar a todas las rutas excepto a /_next, /api y archivos con extensión
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.).*)'],
+  // Aplicar a todas las rutas excepto a /_next, /api, archivos con extensión y /assets
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\.|assets/).*)'],
 };

@@ -1,0 +1,35 @@
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-2xl);
+  padding: var(--space-lg) 0;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md) var(--space-xl);
+  background-color: var(--color-primary-light);
+  color: #fff;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.link:hover {
+  background-color: var(--color-primary-dark, var(--color-primary));
+  transform: translateY(-2px);
+  color: #fff;
+}
+
+.link:active {
+  transform: translateY(0);
+}
+
+.info {
+  color: var(--color-text-muted, #666);
+  font-style: italic;
+}

@@ -1,6 +1,6 @@
 export const GET_MENU_ITEMS = `
-  query GetMenuItems($location: MenuLocationEnum = PRIMARY, $language: LanguageCodeFilterEnum = ES) {
-    menuItems(where: {location: $location, language: $language}) {
+  query GetMenuItems {
+    menuItems(first: 100) {
       nodes {
         id
         parentId

@@ -1,85 +1,160 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background: var(--color-bg-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
   height: 100%;
   position: relative;
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
 }
 
-.cardLink {
+.card::before {
+  content: '';
   position: absolute;
-  top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-accent);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform var(--transition-base);
   z-index: 1;
 }
 
 .card:hover {
-  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
 }
 
+.card:hover::before {
+  transform: scaleY(1);
+}
+
+/* ─── Overlay Link ─────────────────────────────────────── */
+.cardLink {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* ─── Image ─────────────────────────────────────────────── */
 .imageWrapper {
+  position: relative;
   width: 100%;
-  height: 200px;
-  background-color: var(--color-bg-muted);
+  aspect-ratio: 16 / 10;
   overflow: hidden;
+  background: var(--color-bg-alt);
 }
 
 .image {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--transition-slow);
 }
 
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+/* ─── Content ───────────────────────────────────────────── */
 .content {
-  padding: var(--spacing-5);
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  flex: 1;
 }
 
+/* ─── Meta (category + date) ───────────────────────────── */
 .meta {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-subtle);
-  margin-bottom: var(--spacing-2);
+  gap: var(--space-md);
 }
 
 .category {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
+  background: var(--color-accent-muted);
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast), color var(--transition-fast);
 }
 
+.card:hover .category {
+  background: rgba(123, 26, 44, 0.1);
+}
+
+.metaDate {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* ─── Title ─────────────────────────────────────────────── */
 .title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  margin-bottom: var(--spacing-3);
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.35;
   color: var(--color-text);
-  line-height: var(--line-height-tight);
+  transition: color var(--transition-fast);
   position: relative;
   z-index: 2;
 }
 
+.titleLink {
+  color: inherit;
+}
+
+.titleLink:hover {
+  color: var(--color-primary-dark);
+}
+
+/* ─── Excerpt ───────────────────────────────────────────── */
 .excerpt {
-  font-size: var(--font-size-base);
-  color: var(--color-text-muted);
-  margin-bottom: var(--spacing-4);
-  flex-grow: 1;
+  font-size: 0.875rem;
+  color: var(--color-text-light);
+  line-height: 1.65;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ─── Footer (Leer más) ─────────────────────────────────── */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .readMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--color-primary);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
+  transition: gap var(--transition-fast), color var(--transition-fast);
+  position: relative;
+  z-index: 2;
 }
 
 .readMore:hover {
-  text-decoration: underline;
+  color: var(--color-primary-dark);
+  gap: 0.6rem;
 }
